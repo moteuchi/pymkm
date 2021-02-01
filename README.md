@@ -133,6 +133,11 @@ _Example_: `"mythic": "1.0"` would set the lowest price Mythic rarity cards to â
 Set a decimal multiplier on each card condition level.
 _Example_: `"PL": "0.5"` would set the price for Played cards to 50% off the trend price.
 
+### 'price_language'
+
+Set a decimal multiplier on each card according a language dict.
+_Example_: `"Japanese": "2"` would set the price for Played cards to 200% off the trend price.
+
 ### `search_filters`
 
 | Variable     | Value                                                                                                       |
