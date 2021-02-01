@@ -18,6 +18,8 @@ class DefaultPriceCalculator(AbstractPriceCalculator):
         condition_discount: float,
         rounding_limit: float,
         card_info: dict,
+        language_id: int,
+        lang_increment: float,
     ) -> float:
         if not is_foil:
             trend_price = card_info["product"]["priceGuide"]["TREND"]
@@ -36,7 +38,9 @@ class DefaultPriceCalculator(AbstractPriceCalculator):
             # Apply condition discount
             if condition:
                 new_price = new_price * condition_discount
-
+            # Apply languge increment
+            if language_id:
+                new_price = new_price * lang_increment
             # Round
             new_price = PyMkmHelper.round_up_to_multiple_of_lower_limit(
                 rounding_limit, new_price

@@ -4,7 +4,7 @@ The PyMKM example app.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "2.3.1"
+__version__ = "2.3.2.1"
 __license__ = "MIT"
 
 import csv
@@ -1224,7 +1224,7 @@ class PyMkmApp:
                             self.config["csv_import_condition"],
                             foil,
                             False,
-                            language_id=language_id,
+                            language_id,
                             api=self.api,
                         )
                         card = {
@@ -1418,6 +1418,16 @@ class PyMkmApp:
         else:
             return discount
 
+    def get_price_language(self, language_id):
+        try:
+            #incr_lang = float(self.config["price_language"][language_id])
+            incr_lang = float(self.config["price_language"][str(language_id)])
+        except KeyError as err:
+            self.logger.error(f"Unknown language '{language_id}'.")
+            raise err
+        else:
+            return incr_lang
+
     def get_price_for_product(
         self,
         product,
@@ -1425,7 +1435,7 @@ class PyMkmApp:
         condition,
         is_foil,
         is_playset,
-        language_id=1,
+        language_id,
         api=None,
     ):
         rounding_limit = self.get_rounding_limit_for_rarity(
@@ -1433,8 +1443,11 @@ class PyMkmApp:
         )
         condition_discount = self.get_discount_for_condition(condition)
 
+        lang_increment = self.get_price_language(language_id)
+        #lang_increment = 4
+
         return self.price_calculator.calculate_price(
-            is_foil, is_playset, condition, condition_discount, rounding_limit, product
+            is_foil, is_playset, condition, condition_discount, rounding_limit, product, language_id, lang_increment
         )
 
     def display_price_changes_table(self, changes_json):
